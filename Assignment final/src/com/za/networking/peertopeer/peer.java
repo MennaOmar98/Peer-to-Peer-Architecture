@@ -72,6 +72,29 @@ public class peer {
 	}
 	communication(bufferedReader,username,serverThread);
 }
+public void communication(BufferedReader bufferedReader, String username, Serverthread serverThread) {
+	try {
+		System.out.println("Now you can communicate (e to exit , c to change)");
+		boolean flag = true;
+		while(flag) {
+			String message = bufferedReader.readLine();
+			if(message.equals("e")) {
+				flag = false;
+				break;
+			}
+			else if (message.equals("c")) {
+				updateListenToPeers(bufferedReader, username, serverThread);
+			}
+			else {
+				StringWriter stringWriter = new StringWriter();
+				Json.createWriter(stringWriter).writeObject(Json.createObjectBuilder().add("username" , username).add("messege",message).build());
+				serverThread.sendMessage(stringWriter.toString());
+			}
+		}
+		System.exit(0);
+	} catch (Exception e) {}
+}
+
     private static boolean connectTServer(String ip, String portNumber) throws UnirestException {
 	    String serverIp = "http://192.168.0.1";
 	    String testserverIp = "http://localhost";
